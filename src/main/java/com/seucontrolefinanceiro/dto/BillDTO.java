@@ -18,6 +18,8 @@ public class BillDTO {
     private final String paymentCategory;
     private final boolean paid;
     private final String userId;
+    private final Integer portion;
+    private final LocalDate paidIn;
 
     public BillDTO(Bill bill) {
         this.id = bill.getId();
@@ -28,9 +30,12 @@ public class BillDTO {
         this.paymentCategory = bill.getPaymentCategory().getDescription();
         this.paid = bill.isPaid();
         this.userId = bill.getUserId();
+        this.portion = bill.getPortion();
+        this.paidIn = bill.getPaidIn();
     }
 
     public static List<BillDTO> converter(List<Bill> bills) {
         return bills.stream().map(BillDTO::new).collect(Collectors.toList());
     }
+
 }

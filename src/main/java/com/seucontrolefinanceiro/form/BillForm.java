@@ -41,6 +41,9 @@ public class BillForm {
     private boolean paid;
     @NonNull
     private String userId;
+    private String parentId;
+    private Integer portion;
+    private LocalDate paidIn;
 
     public Bill converter() {
         return Bill.builder()
@@ -48,12 +51,14 @@ public class BillForm {
                 .billDescription(this.getBillDescription())
                 .amount(this.getAmount())
                 .everyMonth(this.isEveryMonth())
-                .sameAmount(this.isSameAmount())
                 .payDAy(this.getPayDAy())
                 .billType(this.getBillType())
                 .paymentCategory(this.getPaymentCategory())
                 .paid(this.isPaid())
                 .userId(this.getUserId())
+                .portion(this.getPortion())
+                .parent(this.getParentId())
+                .paidIn(this.getPaidIn())
                 .build();
     }
 }

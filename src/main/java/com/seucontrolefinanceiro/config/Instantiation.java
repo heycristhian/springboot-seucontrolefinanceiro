@@ -46,140 +46,120 @@ public class Instantiation implements CommandLineRunner {
 
         PaymentCategory loan = PaymentCategory.builder()
                 .description("Empréstimo")
-                .mutable(false)
                 .billType(BillType.RECEIVEMENT)
                 .build();
         paymentCategories.add(loan);
 
         PaymentCategory salary = PaymentCategory.builder()
                 .description("Salário")
-                .mutable(false)
                 .billType(BillType.RECEIVEMENT)
                 .build();
         paymentCategories.add(salary);
 
         PaymentCategory investment = PaymentCategory.builder()
                 .description("Investimento")
-                .mutable(false)
                 .billType(BillType.RECEIVEMENT)
                 .build();
         paymentCategories.add(investment);
 
         PaymentCategory others = PaymentCategory.builder()
-                .description("Outras receitas")
-                .mutable(false)
+                .description("Outros")
                 .billType(BillType.RECEIVEMENT)
                 .build();
         paymentCategories.add(others);
 
         PaymentCategory bank = PaymentCategory.builder()
                 .description("Banco")
-                .mutable(false)
                 .billType(BillType.PAYMENT)
                 .build();
         paymentCategories.add(bank);
 
         PaymentCategory foods = PaymentCategory.builder()
                 .description("Alimentação")
-                .mutable(false)
                 .billType(BillType.PAYMENT)
                 .build();
         paymentCategories.add(foods);
 
         PaymentCategory health = PaymentCategory.builder()
                 .description("Saúde")
-                .mutable(false)
                 .billType(BillType.PAYMENT)
                 .build();
         paymentCategories.add(health);
 
         PaymentCategory services = PaymentCategory.builder()
                 .description("Serviços")
-                .mutable(false)
                 .billType(BillType.PAYMENT)
                 .build();
         paymentCategories.add(services);
 
         PaymentCategory snackBar = PaymentCategory.builder()
                 .description("Lanchonetes")
-                .mutable(false)
                 .billType(BillType.PAYMENT)
                 .build();
         paymentCategories.add(snackBar);
 
         PaymentCategory shopping = PaymentCategory.builder()
                 .description("Compras")
-                .mutable(false)
                 .billType(BillType.PAYMENT)
                 .build();
         paymentCategories.add(shopping);
 
         PaymentCategory debt = PaymentCategory.builder()
                 .description("Dívidas")
-                .mutable(false)
                 .billType(BillType.PAYMENT)
                 .build();
         paymentCategories.add(debt);
 
         PaymentCategory education = PaymentCategory.builder()
                 .description("Educação")
-                .mutable(false)
                 .billType(BillType.PAYMENT)
                 .build();
         paymentCategories.add(education);
 
         PaymentCategory tax = PaymentCategory.builder()
                 .description("Impostos")
-                .mutable(false)
                 .billType(BillType.PAYMENT)
                 .build();
         paymentCategories.add(tax);
 
         PaymentCategory recreation = PaymentCategory.builder()
                 .description("Lazer")
-                .mutable(false)
                 .billType(BillType.PAYMENT)
                 .build();
         paymentCategories.add(recreation);
 
         PaymentCategory market = PaymentCategory.builder()
                 .description("Supermercado")
-                .mutable(false)
                 .billType(BillType.PAYMENT)
                 .build();
         paymentCategories.add(market);
 
         PaymentCategory gifts = PaymentCategory.builder()
                 .description("Presentes")
-                .mutable(false)
                 .billType(BillType.PAYMENT)
                 .build();
         paymentCategories.add(gifts);
 
         PaymentCategory clothes = PaymentCategory.builder()
                 .description("Roupas")
-                .mutable(false)
                 .billType(BillType.PAYMENT)
                 .build();
         paymentCategories.add(clothes);
 
         PaymentCategory transport = PaymentCategory.builder()
                 .description("Transporte")
-                .mutable(false)
                 .billType(BillType.PAYMENT)
                 .build();
         paymentCategories.add(transport);
 
         PaymentCategory trip = PaymentCategory.builder()
                 .description("Viagem")
-                .mutable(false)
                 .billType(BillType.PAYMENT)
                 .build();
         paymentCategories.add(trip);
 
         PaymentCategory othersPayment = PaymentCategory.builder()
-                .description("Viagem")
-                .mutable(false)
+                .description("Outros")
                 .billType(BillType.PAYMENT)
                 .build();
         paymentCategories.add(othersPayment);
@@ -198,6 +178,13 @@ public class Instantiation implements CommandLineRunner {
                 .cpf("45073070828")
                 .build();
 
+        User user = User.builder()
+                .fullName("Cristhian Dias")
+                .email("heycristhian@gmail.com")
+                .password(new BCryptPasswordEncoder().encode("admin"))
+                .cpf("45073070828")
+                .build();
+
         boolean exist = userRepository.findAll().stream()
                 .filter(x -> x.getEmail().equals(adm.getEmail()))
                 .findAny()
@@ -211,13 +198,15 @@ public class Instantiation implements CommandLineRunner {
                     .billDescription("NuBank")
                     .amount(BigDecimal.valueOf(150))
                     .everyMonth(false)
-                    .sameAmount(false)
                     .payDAy(LocalDate.of(2020, 6, 12))
                     .billType(BillType.PAYMENT)
                     .paymentCategory(bank)
                     .userId(adm.getId())
                     .build();
+            adm.addToListBill(bill);
             billService.insert(bill);
+            userRepository.save(adm);
+            userRepository.save(user);
         }
     }
 }

@@ -19,12 +19,12 @@ public class Bill {
     private String billDescription;
     private BigDecimal amount;
     private boolean everyMonth;
-    private boolean sameAmount;
     private LocalDate payDAy;
     private BillType billType;
     private PaymentCategory paymentCategory;
     private boolean paid;
     private String parent;
     private String userId;
-
+    private Integer portion;
+    private LocalDate paidIn;
 }

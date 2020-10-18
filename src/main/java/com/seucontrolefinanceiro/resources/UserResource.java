@@ -13,7 +13,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("scf-service/users")
@@ -67,9 +66,9 @@ public class UserResource implements IResource<UserDTO, UserForm> {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/{id}/bills")
-    public ResponseEntity<List<Bill>> findBills(@PathVariable String id) {
-        User user = service.findById(id);
-        return ResponseEntity.ok().body(user.getBills());
+    @GetMapping("/{user}/bills")
+    public ResponseEntity<List<Bill>> findBills(@PathVariable String user) {
+        User userFound = service.findByEmail(user).get();
+        return ResponseEntity.ok().body(userFound.getBills());
     }
 }

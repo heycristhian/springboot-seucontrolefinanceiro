@@ -16,7 +16,6 @@ com\seucontrolefinanceiro\services\exception\ObjectNotFoundException.class
 com\seucontrolefinanceiro\config\security\SecurityConfigurations.class
 com\seucontrolefinanceiro\dto\UserDTO.class
 com\seucontrolefinanceiro\resources\exception\StandardError.class
-com\seucontrolefinanceiro\services\util\BillEveryMonth.class
 com\seucontrolefinanceiro\form\LoginForm.class
 com\seucontrolefinanceiro\repository\BillRepository.class
 com\seucontrolefinanceiro\config\security\AuthenticationService.class
