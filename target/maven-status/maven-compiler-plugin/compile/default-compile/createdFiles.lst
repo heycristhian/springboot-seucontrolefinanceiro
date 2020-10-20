@@ -1,6 +1,4 @@
-com\seucontrolefinanceiro\config\util\ObjectExist.class
 com\seucontrolefinanceiro\form\PaymentCategoryForm.class
-com\seucontrolefinanceiro\services\IService.class
 com\seucontrolefinanceiro\domain\Profile.class
 com\seucontrolefinanceiro\repository\UserRepository.class
 com\seucontrolefinanceiro\form\BillForm.class
@@ -22,6 +20,7 @@ com\seucontrolefinanceiro\config\security\AuthenticationService.class
 com\seucontrolefinanceiro\services\BillService.class
 com\seucontrolefinanceiro\dto\TokenDTO.class
 com\seucontrolefinanceiro\config\security\TokenService.class
+com\seucontrolefinanceiro\services\Service.class
 com\seucontrolefinanceiro\services\UserService.class
 com\seucontrolefinanceiro\domain\Bill.class
 com\seucontrolefinanceiro\resources\UserResource.class
