@@ -26,10 +26,9 @@ public class Instantiation implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
-        boolean existData = paymentCategoryRepository.findAll().isEmpty();
+        boolean notExistData = paymentCategoryRepository.findAll().isEmpty();
 
-        if (existData) {
-
+        if (notExistData) {
             paymentCategoryRepository.save(
                 PaymentCategory.builder()
                     .description("Empréstimo")

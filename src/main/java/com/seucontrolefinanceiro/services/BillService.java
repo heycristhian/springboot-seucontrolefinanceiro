@@ -7,26 +7,22 @@ import com.seucontrolefinanceiro.repository.UserRepository;
 import com.seucontrolefinanceiro.services.exception.ObjectNotFoundException;
 import com.seucontrolefinanceiro.services.util.GenerateObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-@Service
-public class BillService implements IService<Bill> {
+@org.springframework.stereotype.Service
+public class BillService implements Service<Bill> {
 
-    @Autowired
-    private BillRepository repository;
+    @Autowired private BillRepository repository;
 
-    @Autowired
-    private UserService userService;
+    @Autowired private UserService userService;
 
-    @Autowired
-    private UserRepository userRepository;
+    @Autowired private UserRepository userRepository;
 
-    private final Integer portion = 11;
+    private final int PORTION_DEFAULT = 11;
 
     @Override
     public List<Bill> findAll() {
@@ -45,7 +41,7 @@ public class BillService implements IService<Bill> {
         user.setBills(repository.findByUserId(bill.getUserId()).get());
 
         if (bill.isEveryMonth()) {
-            Integer index = bill.getPortion() == null ? portion : bill.getPortion();
+            Integer index = bill.getPortion() == null ? PORTION_DEFAULT : bill.getPortion();
             List<Bill> bills = GenerateObject.generateBills(bill, index);
             repository.insert(bill);
             user.addToListBill(bill);
@@ -86,7 +82,7 @@ public class BillService implements IService<Bill> {
             List<Bill> bills = new ArrayList<>();
 
             if (newObjIsEveryMonth && !oldObjIsEveryMonth) {
-                Integer index = newObj.getPortion() == null ? portion : newObj.getPortion();
+                Integer index = newObj.getPortion() == null ? PORTION_DEFAULT : newObj.getPortion();
                 bills = GenerateObject.generateBills(newObj, index);
 
                 for (Bill b : bills) {
