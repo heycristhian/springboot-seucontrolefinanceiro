@@ -4,7 +4,7 @@ import com.seucontrolefinanceiro.domain.model.PaymentCategory;
 import com.seucontrolefinanceiro.domain.dto.response.PaymentCategoryResponse;
 import com.seucontrolefinanceiro.domain.dto.response.UserResponse;
 import com.seucontrolefinanceiro.domain.dto.request.PaymentCategoryRequest;
-import com.seucontrolefinanceiro.service.PaymentCategoryScfService;
+import com.seucontrolefinanceiro.service.PaymentCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -19,7 +19,7 @@ import java.util.List;
 public class PaymentCategoryController {
 
     @Autowired
-    private PaymentCategoryScfService service;
+    private PaymentCategoryService service;
 
     @GetMapping
     public ResponseEntity<List<PaymentCategoryResponse>> find(String query) {

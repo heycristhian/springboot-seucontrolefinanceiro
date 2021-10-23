@@ -5,7 +5,7 @@ import com.seucontrolefinanceiro.domain.dto.response.UserResponse;
 import com.seucontrolefinanceiro.domain.model.Bill;
 import com.seucontrolefinanceiro.domain.model.User;
 import com.seucontrolefinanceiro.exception.ObjectNotFoundException;
-import com.seucontrolefinanceiro.service.BillScfService;
+import com.seucontrolefinanceiro.service.BillService;
 import com.seucontrolefinanceiro.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +13,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 
@@ -24,7 +25,7 @@ public class UserController {
     private UserService service;
 
     @Autowired
-    private BillScfService billService;
+    private BillService billService;
 
     @GetMapping
     public ResponseEntity<List<UserResponse>> find(String user) {
@@ -70,16 +71,16 @@ public class UserController {
     }
 
     @PutMapping
-    public ResponseEntity<UserResponse> update(@RequestBody @Validated UserRequest form, UriComponentsBuilder uriBuilder) {
-        User user = form.converter();
-        user = service.update(user);
-        URI uri = uriBuilder.path("scf-service/users/{id}").buildAndExpand(user.getId()).toUri();
+    public ResponseEntity<UserResponse> update(@RequestBody @Valid UserRequest request) {
+        User user = request.converter();
+        service.update(user);
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/{user}/bills")
     public ResponseEntity<List<Bill>> findBills(@PathVariable String user) {
-        User userFound = service.findByEmail(user).get();
+        User userFound = service.findByEmail(user)
+                .orElseThrow(() -> new ObjectNotFoundException("User not found referring to the Email sent"));
         return ResponseEntity.ok().body(userFound.getBills());
     }
 }

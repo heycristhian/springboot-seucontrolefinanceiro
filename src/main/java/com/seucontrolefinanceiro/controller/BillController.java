@@ -4,8 +4,8 @@ import com.seucontrolefinanceiro.domain.model.Bill;
 import com.seucontrolefinanceiro.domain.dto.response.BillResponse;
 import com.seucontrolefinanceiro.domain.dto.response.UserResponse;
 import com.seucontrolefinanceiro.domain.dto.request.BillRequest;
-import com.seucontrolefinanceiro.service.BillScfService;
-import com.seucontrolefinanceiro.service.PaymentCategoryScfService;
+import com.seucontrolefinanceiro.service.BillService;
+import com.seucontrolefinanceiro.service.PaymentCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -20,10 +20,10 @@ import java.util.List;
 public class BillController {
 
     @Autowired
-    private BillScfService service;
+    private BillService service;
 
     @Autowired
-    private PaymentCategoryScfService paymentCategoryService;
+    private PaymentCategoryService paymentCategoryService;
 
     @GetMapping
     public ResponseEntity<List<BillResponse>> find(String query) {

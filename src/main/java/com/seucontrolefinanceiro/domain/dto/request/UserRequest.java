@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public class UserRequest {
+    @NonNull
     private final String id;
     @NonNull
     private final String fullName;

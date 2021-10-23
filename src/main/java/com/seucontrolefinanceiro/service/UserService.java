@@ -3,12 +3,14 @@ package com.seucontrolefinanceiro.service;
 import com.seucontrolefinanceiro.domain.model.User;
 import com.seucontrolefinanceiro.exception.ObjectNotFoundException;
 import com.seucontrolefinanceiro.repository.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Service
 public class UserService {
 
@@ -16,6 +18,7 @@ public class UserService {
     private UserRepository repository;
 
     public List<User> findAll() {
+        log.info("Finding all users in the database");
         return repository.findAll();
     }
 
@@ -37,19 +40,9 @@ public class UserService {
         repository.deleteById(id);
     }
 
-    public User update(User newUser) {
-        User currentUser = findById(newUser.getId());
-        currentUser = updateData(newUser, currentUser.getId());
-        return repository.save(currentUser);
+    public User update(User user) {
+        findById(user.getId());
+        return repository.save(user);
     }
 
-    public User updateData(User newUser, String id) {
-        return User.builder()
-                .id(id)
-                .fullName(newUser.getFullName())
-                .email(newUser.getEmail())
-                .password(newUser.getPassword())
-                .cpf(newUser.getCpf())
-                .build();
-    }
 }

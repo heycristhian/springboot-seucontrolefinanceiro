@@ -3,7 +3,7 @@ package com.seucontrolefinanceiro.domain.dto.request;
 import com.seucontrolefinanceiro.domain.model.Bill;
 import com.seucontrolefinanceiro.domain.model.BillType;
 import com.seucontrolefinanceiro.domain.model.PaymentCategory;
-import com.seucontrolefinanceiro.service.PaymentCategoryScfService;
+import com.seucontrolefinanceiro.service.PaymentCategoryService;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -20,7 +20,7 @@ import java.time.LocalDate;
 public class BillRequest {
 
     @Autowired
-    private PaymentCategoryScfService service;
+    private PaymentCategoryService service;
 
     private String id;
     @NonNull

@@ -108,7 +108,13 @@
 				<configuration>
 					<excludes>
 						<exclude>**/Application.*</exclude>
-						<exclude>com/con</exclude>
+						<exclude>**/seucontrolefinanceiro/configuration/**/*</exclude>
+						<exclude>**/seucontrolefinanceiro/domain/**/*</exclude>
+						<exclude>**/seucontrolefinanceiro/exception/*</exclude>
+						<exclude>**/seucontrolefinanceiro/repository/*</exclude>
+						<exclude>**/seucontrolefinanceiro/util/*</exclude>
+						<exclude>**/seucontrolefinanceiro/controller/handler/*</exclude>
+						<exclude>**/test/java/**/*</exclude>
 					</excludes>
 					<rules>
 						<rule>

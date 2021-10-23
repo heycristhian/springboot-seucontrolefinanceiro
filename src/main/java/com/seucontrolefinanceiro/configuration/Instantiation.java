@@ -6,7 +6,7 @@ import com.seucontrolefinanceiro.domain.model.User;
 import com.seucontrolefinanceiro.repository.BillRepository;
 import com.seucontrolefinanceiro.repository.PaymentCategoryRepository;
 import com.seucontrolefinanceiro.repository.UserRepository;
-import com.seucontrolefinanceiro.service.BillScfService;
+import com.seucontrolefinanceiro.service.BillService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
@@ -19,7 +19,7 @@ public class Instantiation implements CommandLineRunner {
 
     @Autowired private UserRepository userRepository;
 
-    @Autowired private BillScfService billService;
+    @Autowired private BillService billService;
 
     @Autowired private BillRepository billRepository;
 
