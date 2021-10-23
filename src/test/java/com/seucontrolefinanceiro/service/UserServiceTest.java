@@ -83,4 +83,11 @@ class UserServiceTest {
         when(repository.save(user)).thenReturn(user);
         assertNotNull(service.update(user));
     }
+
+    @Test
+    public void mustReturnObjectNotFoundException_WhenCallUpdate() {
+        User user = ScenarioFactory.gettUserWithId();
+        when(repository.findById(anyString())).thenThrow(ObjectNotFoundException.class);
+        assertThrows(ObjectNotFoundException.class, () -> service.update(user));
+    }
 }
