@@ -1,11 +1,10 @@
-package com.seucontrolefinanceiro.service.impl;
+package com.seucontrolefinanceiro.service;
 
 import com.seucontrolefinanceiro.domain.model.Bill;
 import com.seucontrolefinanceiro.domain.model.User;
+import com.seucontrolefinanceiro.exception.ObjectNotFoundException;
 import com.seucontrolefinanceiro.repository.BillRepository;
 import com.seucontrolefinanceiro.repository.UserRepository;
-import com.seucontrolefinanceiro.exception.ObjectNotFoundException;
-import com.seucontrolefinanceiro.service.Service;
 import com.seucontrolefinanceiro.util.GenerateObject;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -15,28 +14,28 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @org.springframework.stereotype.Service
-public class BillService implements Service<Bill> {
+public class BillScfService {
 
-    @Autowired private BillRepository repository;
+    @Autowired
+    private BillRepository repository;
 
-    @Autowired private UserService userService;
+    @Autowired
+    private UserService userService;
 
-    @Autowired private UserRepository userRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     private final int PORTION_DEFAULT = 11;
 
-    @Override
     public List<Bill> findAll() {
         return repository.findAll();
     }
 
-    @Override
     public Bill findById(String id) {
         Optional<Bill> obj = repository.findById(id);
         return obj.orElseThrow(() -> new ObjectNotFoundException("Object not found!"));
     }
 
-    @Override
     public Bill save(Bill bill) {
         User user = userService.findById(bill.getUserId());
         List<Bill> allBillsByUserId = repository.findByUserId(bill.getUserId()).orElse(null);
@@ -49,13 +48,11 @@ public class BillService implements Service<Bill> {
         return bill;
     }
 
-    @Override
     public void delete(String id) {
         findById(id);
         repository.deleteById(id);
     }
 
-    @Override
     public Bill update(Bill newBill) {
         if (!newBill.isPaid()) {
             Bill oldBill = findById(newBill.getId());
@@ -64,10 +61,10 @@ public class BillService implements Service<Bill> {
             newBill.setParent((newBill.getParent() == null) ? newBill.getId() : newBill.getParent());
 
             if (newBillIsEveryMonth && !oldBillIsEveryMonth) {
-               createChildrenBill(newBill);
+                createChildrenBill(newBill);
             } else if (oldBillIsEveryMonth && !newBillIsEveryMonth) {
                 removeChildrenBill(newBill);
-            } else if(newBill.isEveryMonth()){
+            } else if (newBill.isEveryMonth()) {
                 onlyUpdateChildrenBill(newBill);
             }
             repository.save(newBill);
@@ -77,7 +74,6 @@ public class BillService implements Service<Bill> {
         }
     }
 
-    @Override
     public Bill updateData(Bill newObj, String id) {
         return Bill.builder()
                 .id(id)
@@ -99,7 +95,7 @@ public class BillService implements Service<Bill> {
         return repository.findAll().stream()
                 .filter(x -> x.getParent().equals(bill.getParent())
                         && !x.getId().equals(bill.getId())
-                        && x.isPaid() == false)
+                        && !x.isPaid())
                 .collect(Collectors.toList());
     }
 
@@ -151,10 +147,10 @@ public class BillService implements Service<Bill> {
         String parentId = newBill.getParent() == null ? newBill.getId() : newBill.getParent();
 
         repository.findByUserId(newBill.getUserId()).get()
-            .stream().filter(x ->
-            x.isPaid() == false
-                    && x.getParent().compareTo(parentId) == 0)
-            .collect(Collectors.toList()).forEach(x -> repository.delete(x));
+                .stream().filter(x ->
+                !x.isPaid()
+                        && x.getParent().compareTo(parentId) == 0)
+                .collect(Collectors.toList()).forEach(x -> repository.delete(x));
 
         newBill.setPortion(null);
     }
@@ -166,7 +162,7 @@ public class BillService implements Service<Bill> {
             bills = repository.findByUserId(newBill.getUserId())
                     .get().stream()
                     .filter(x -> x.getParent().equals(parentId)
-                            && x.isPaid() == false
+                            && !x.isPaid()
                             && !x.getId().equals(newBill.getId()))
                     .collect(Collectors.toList());
         } catch (RuntimeException e) {

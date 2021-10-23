@@ -1,12 +1,11 @@
-package com.seucontrolefinanceiro.controller.impl;
+package com.seucontrolefinanceiro.controller;
 
-import com.seucontrolefinanceiro.controller.ScfController;
 import com.seucontrolefinanceiro.domain.model.Bill;
 import com.seucontrolefinanceiro.domain.dto.response.BillResponse;
 import com.seucontrolefinanceiro.domain.dto.response.UserResponse;
 import com.seucontrolefinanceiro.domain.dto.request.BillRequest;
-import com.seucontrolefinanceiro.service.impl.BillService;
-import com.seucontrolefinanceiro.service.impl.PaymentCategoryService;
+import com.seucontrolefinanceiro.service.BillScfService;
+import com.seucontrolefinanceiro.service.PaymentCategoryScfService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -18,29 +17,26 @@ import java.util.List;
 
 @RestController
 @RequestMapping("scf-service/bills")
-public class BillController implements ScfController<BillResponse, BillRequest> {
+public class BillController {
 
     @Autowired
-    private BillService service;
+    private BillScfService service;
 
     @Autowired
-    private PaymentCategoryService paymentCategoryService;
+    private PaymentCategoryScfService paymentCategoryService;
 
-    @Override
     @GetMapping
     public ResponseEntity<List<BillResponse>> find(String query) {
         List<Bill> bills = service.findAll();
         return ResponseEntity.ok().body(BillResponse.converter(bills));
     }
 
-    @Override
     @GetMapping("/{id}")
     public ResponseEntity<BillResponse> findById(@PathVariable String id) {
         Bill bill = service.findById(id);
         return ResponseEntity.ok().body(new BillResponse(bill));
     }
 
-    @Override
     @PostMapping
     public ResponseEntity<BillResponse> insert(@RequestBody @Validated BillRequest form, UriComponentsBuilder uriBuilder) {
         Bill bill = form.converter();
@@ -49,7 +45,6 @@ public class BillController implements ScfController<BillResponse, BillRequest> 
         return ResponseEntity.created(uri).body(new BillResponse(bill));
     }
 
-    @Override
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(String id) {
         try {

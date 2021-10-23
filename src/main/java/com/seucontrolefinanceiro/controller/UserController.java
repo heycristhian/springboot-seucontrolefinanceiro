@@ -1,13 +1,12 @@
-package com.seucontrolefinanceiro.controller.impl;
+package com.seucontrolefinanceiro.controller;
 
-import com.seucontrolefinanceiro.controller.ScfController;
+import com.seucontrolefinanceiro.domain.dto.request.UserRequest;
+import com.seucontrolefinanceiro.domain.dto.response.UserResponse;
 import com.seucontrolefinanceiro.domain.model.Bill;
 import com.seucontrolefinanceiro.domain.model.User;
-import com.seucontrolefinanceiro.domain.dto.response.UserResponse;
-import com.seucontrolefinanceiro.domain.dto.request.UserRequest;
-import com.seucontrolefinanceiro.service.impl.BillService;
-import com.seucontrolefinanceiro.service.impl.UserService;
 import com.seucontrolefinanceiro.exception.ObjectNotFoundException;
+import com.seucontrolefinanceiro.service.BillScfService;
+import com.seucontrolefinanceiro.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -19,12 +18,14 @@ import java.util.List;
 
 @RestController
 @RequestMapping("scf-service/users")
-public class UserResource implements ScfController<UserResponse, UserRequest> {
+public class UserController {
 
-    @Autowired private UserService service;
-    @Autowired private BillService billService;
+    @Autowired
+    private UserService service;
 
-    @Override
+    @Autowired
+    private BillScfService billService;
+
     @GetMapping
     public ResponseEntity<List<UserResponse>> find(String user) {
         System.out.println(user);
@@ -32,14 +33,12 @@ public class UserResource implements ScfController<UserResponse, UserRequest> {
         return ResponseEntity.ok().body(UserResponse.converter((users)));
     }
 
-    @Override
     @GetMapping("/{id}")
     public ResponseEntity<UserResponse> findById(@PathVariable String id) {
         User user = service.findById(id);
         return ResponseEntity.ok().body(new UserResponse(user));
     }
 
-    @Override
     @PostMapping
     public ResponseEntity<UserResponse> insert(@RequestBody @Validated UserRequest form, UriComponentsBuilder uriBuilder) {
         User user = form.converter();
@@ -48,7 +47,6 @@ public class UserResource implements ScfController<UserResponse, UserRequest> {
         return ResponseEntity.created(uri).body(new UserResponse(user));
     }
 
-    @Override
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable String id) {
         try {
@@ -63,15 +61,14 @@ public class UserResource implements ScfController<UserResponse, UserRequest> {
     @DeleteMapping("/resetAccount/{id}")
     public ResponseEntity<String> resetAccount(@PathVariable String id) {
         try {
-        User user = service.findById(id);
-        billService.deleteAll(user.getBills());
-        return ResponseEntity.ok("Account reset successfully!");
+            User user = service.findById(id);
+            billService.deleteAll(user.getBills());
+            return ResponseEntity.ok("Account reset successfully!");
         } catch (ObjectNotFoundException e) {
-           return ResponseEntity.notFound().build();
+            return ResponseEntity.notFound().build();
         }
     }
 
-    @Override
     @PutMapping
     public ResponseEntity<UserResponse> update(@RequestBody @Validated UserRequest form, UriComponentsBuilder uriBuilder) {
         User user = form.converter();

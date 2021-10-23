@@ -1,11 +1,10 @@
-package com.seucontrolefinanceiro.controller.impl;
+package com.seucontrolefinanceiro.controller;
 
-import com.seucontrolefinanceiro.controller.ScfController;
 import com.seucontrolefinanceiro.domain.model.PaymentCategory;
 import com.seucontrolefinanceiro.domain.dto.response.PaymentCategoryResponse;
 import com.seucontrolefinanceiro.domain.dto.response.UserResponse;
 import com.seucontrolefinanceiro.domain.dto.request.PaymentCategoryRequest;
-import com.seucontrolefinanceiro.service.impl.PaymentCategoryService;
+import com.seucontrolefinanceiro.service.PaymentCategoryScfService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -17,26 +16,23 @@ import java.util.List;
 
 @RestController
 @RequestMapping("scf-service/payment-categories")
-public class PaymentCategoryResource implements ScfController<PaymentCategoryResponse, PaymentCategoryRequest> {
+public class PaymentCategoryController {
 
     @Autowired
-    private PaymentCategoryService service;
+    private PaymentCategoryScfService service;
 
-    @Override
     @GetMapping
     public ResponseEntity<List<PaymentCategoryResponse>> find(String query) {
         List<PaymentCategory> paymentCategories = service.findAll();
         return ResponseEntity.ok().body(PaymentCategoryResponse.converter((paymentCategories)));
     }
 
-    @Override
     @GetMapping("/{id}")
     public ResponseEntity<PaymentCategoryResponse> findById(@PathVariable String id) {
         PaymentCategory paymentCategory = service.findById(id);
         return ResponseEntity.ok().body(new PaymentCategoryResponse(paymentCategory));
     }
 
-    @Override
     @PostMapping
     public ResponseEntity<PaymentCategoryResponse> insert(@RequestBody @Validated PaymentCategoryRequest form, UriComponentsBuilder uriBuilder) {
         PaymentCategory paymentCategory = form.converter();
@@ -45,7 +41,6 @@ public class PaymentCategoryResource implements ScfController<PaymentCategoryRes
         return ResponseEntity.created(uri).body(new PaymentCategoryResponse(paymentCategory));
     }
 
-    @Override
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable String id) {
         try {
@@ -57,7 +52,6 @@ public class PaymentCategoryResource implements ScfController<PaymentCategoryRes
         }
     }
 
-    @Override
     @PutMapping
     public ResponseEntity<UserResponse> update(@RequestBody @Validated PaymentCategoryRequest form, UriComponentsBuilder uriBuilder) {
         PaymentCategory paymentCategory = form.converter();

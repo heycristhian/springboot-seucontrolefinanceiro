@@ -1,4 +1,4 @@
-package com.seucontrolefinanceiro.controller.impl;
+package com.seucontrolefinanceiro.controller;
 
 import com.seucontrolefinanceiro.configuration.security.TokenService;
 import com.seucontrolefinanceiro.domain.model.User;

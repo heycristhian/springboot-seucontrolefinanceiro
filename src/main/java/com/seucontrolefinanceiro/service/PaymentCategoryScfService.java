@@ -1,51 +1,44 @@
-package com.seucontrolefinanceiro.service.impl;
+package com.seucontrolefinanceiro.service;
 
 import com.seucontrolefinanceiro.domain.model.PaymentCategory;
 import com.seucontrolefinanceiro.repository.PaymentCategoryRepository;
 import com.seucontrolefinanceiro.exception.ObjectNotFoundException;
-import com.seucontrolefinanceiro.service.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 import java.util.Optional;
 
 @org.springframework.stereotype.Service
-public class PaymentCategoryService implements Service<PaymentCategory> {
+public class PaymentCategoryScfService {
 
     @Autowired
     private PaymentCategoryRepository repository;
 
-    @Override
     public List<PaymentCategory> findAll() {
         return repository.findAll();
     }
 
-    @Override
     public PaymentCategory findById(String id) {
         Optional<PaymentCategory> obj = repository.findById(id);
         return obj.orElseThrow(() -> new ObjectNotFoundException("Object not found!"));
     }
 
-    @Override
     public PaymentCategory save(PaymentCategory paymentCategory) {
         PaymentCategory insert = repository.insert(paymentCategory);
         return insert;
     }
 
-    @Override
     public void delete(String id) {
         findById(id);
         repository.deleteById(id);
     }
 
-    @Override
     public PaymentCategory update(PaymentCategory newObj) {
         PaymentCategory currentObj = findById(newObj.getId());
         currentObj = updateData(newObj, currentObj.getId());
         return repository.save(currentObj);
     }
 
-    @Override
     public PaymentCategory updateData(PaymentCategory newObj, String id) {
         return PaymentCategory.builder()
                 .id(id)
