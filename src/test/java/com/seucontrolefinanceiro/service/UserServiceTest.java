@@ -32,7 +32,7 @@ class UserServiceTest {
     public void mustReturnAllUserus_WhenCallFindAll() {
         List<User> users = UserFactory.getUsers();
         when(repository.findAll()).thenReturn(users);
-        assertTrue(() -> !service.findAll().isEmpty());
+        assertFalse(service.findAll().isEmpty());
     }
 
     @Test

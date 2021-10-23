@@ -1,14 +1,15 @@
 package com.seucontrolefinanceiro.service;
 
 import com.seucontrolefinanceiro.domain.model.PaymentCategory;
-import com.seucontrolefinanceiro.repository.PaymentCategoryRepository;
 import com.seucontrolefinanceiro.exception.ObjectNotFoundException;
+import com.seucontrolefinanceiro.repository.PaymentCategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
-@org.springframework.stereotype.Service
+@Service
 public class PaymentCategoryService {
 
     @Autowired
@@ -23,9 +24,8 @@ public class PaymentCategoryService {
         return obj.orElseThrow(() -> new ObjectNotFoundException("Object not found!"));
     }
 
-    public PaymentCategory save(PaymentCategory paymentCategory) {
-        PaymentCategory insert = repository.insert(paymentCategory);
-        return insert;
+    public PaymentCategory insert(PaymentCategory paymentCategory) {
+        return repository.insert(paymentCategory);
     }
 
     public void delete(String id) {
@@ -33,18 +33,9 @@ public class PaymentCategoryService {
         repository.deleteById(id);
     }
 
-    public PaymentCategory update(PaymentCategory newObj) {
-        PaymentCategory currentObj = findById(newObj.getId());
-        currentObj = updateData(newObj, currentObj.getId());
-        return repository.save(currentObj);
-    }
-
-    public PaymentCategory updateData(PaymentCategory newObj, String id) {
-        return PaymentCategory.builder()
-                .id(id)
-                .description(newObj.getDescription())
-                .billType(newObj.getBillType())
-                .build();
+    public PaymentCategory update(PaymentCategory paymentCategory) {
+        findById(paymentCategory.getId());
+        return repository.save(paymentCategory);
     }
 
     public List<PaymentCategory> findByDescriptionContainingIgnoreCase(String description) {

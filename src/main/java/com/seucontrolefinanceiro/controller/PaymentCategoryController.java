@@ -36,7 +36,7 @@ public class PaymentCategoryController {
     @PostMapping
     public ResponseEntity<PaymentCategoryResponse> insert(@RequestBody @Validated PaymentCategoryRequest form, UriComponentsBuilder uriBuilder) {
         PaymentCategory paymentCategory = form.converter();
-        paymentCategory = service.save(paymentCategory);
+        paymentCategory = service.insert(paymentCategory);
         URI uri = uriBuilder.path("scf-service/payment-categories/{id}").buildAndExpand(paymentCategory.getId()).toUri();
         return ResponseEntity.created(uri).body(new PaymentCategoryResponse(paymentCategory));
     }
