@@ -2,7 +2,7 @@ package com.seucontrolefinanceiro.service;
 
 import com.seucontrolefinanceiro.domain.model.User;
 import com.seucontrolefinanceiro.exception.ObjectNotFoundException;
-import com.seucontrolefinanceiro.feature.ScenarioFactory;
+import com.seucontrolefinanceiro.feature.UserFactory;
 import com.seucontrolefinanceiro.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -30,14 +30,14 @@ class UserServiceTest {
 
     @Test
     public void mustReturnAllUserus_WhenCallFindAll() {
-        List<User> users = ScenarioFactory.getUsers();
+        List<User> users = UserFactory.getUsers();
         when(repository.findAll()).thenReturn(users);
         assertTrue(() -> !service.findAll().isEmpty());
     }
 
     @Test
     public void mustReturnUser_WhenCallFindById() {
-        User user = ScenarioFactory.getDefaultUser();
+        User user = UserFactory.getDefaultUser();
         when(repository.findById(anyString())).thenReturn(Optional.of(user));
         assertNotNull(service.findById(anyString()));
     }
@@ -50,21 +50,21 @@ class UserServiceTest {
 
     @Test
     public void mustReturnUser_WhenFindByEmail() {
-        User user = ScenarioFactory.getDefaultUser();
+        User user = UserFactory.getDefaultUser();
         when(repository.findByEmail(anyString())).thenReturn(Optional.of(user));
         assertNotNull(service.findByEmail(anyString()));
     }
 
     @Test
     public void mustReturnUser_WhenSave() {
-        User user = ScenarioFactory.getDefaultUser();
+        User user = UserFactory.getDefaultUser();
         when(repository.save(user)).thenReturn(user);
         assertNotNull(service.save(user));
     }
 
     @Test
     public void mustDeleteUser_WhenCallDelete() {
-        User user = ScenarioFactory.gettUserWithId();
+        User user = UserFactory.getUserWithId();
         when(repository.findById(anyString())).thenReturn(Optional.of(user));
         service.delete(user.getId());
         verify(repository, times(1)).deleteById(user.getId());
@@ -78,7 +78,7 @@ class UserServiceTest {
 
     @Test
     public void mustReturnUser_WhenCallUpdate() {
-        User user = ScenarioFactory.gettUserWithId();
+        User user = UserFactory.getUserWithId();
         when(repository.findById(anyString())).thenReturn(Optional.of(user));
         when(repository.save(user)).thenReturn(user);
         assertNotNull(service.update(user));
@@ -86,7 +86,7 @@ class UserServiceTest {
 
     @Test
     public void mustReturnObjectNotFoundException_WhenCallUpdate() {
-        User user = ScenarioFactory.gettUserWithId();
+        User user = UserFactory.getUserWithId();
         when(repository.findById(anyString())).thenThrow(ObjectNotFoundException.class);
         assertThrows(ObjectNotFoundException.class, () -> service.update(user));
     }

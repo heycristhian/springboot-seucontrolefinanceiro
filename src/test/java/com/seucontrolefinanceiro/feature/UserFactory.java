@@ -5,7 +5,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.List;
 
-public class ScenarioFactory {
+public class UserFactory {
 
 
     public static List<User> getUsers() {
@@ -35,7 +35,7 @@ public class ScenarioFactory {
                 .build();
     }
 
-    public static User gettUserWithId() {
+    public static User getUserWithId() {
         return User.builder()
                 .id("617344e1c7d4da6d3c8082cf")
                 .fullName("Cristhian Dias 1")
