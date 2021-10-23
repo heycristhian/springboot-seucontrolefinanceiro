@@ -108,6 +108,7 @@
 				<configuration>
 					<excludes>
 						<exclude>**/Application.*</exclude>
+						<exclude>com/con</exclude>
 					</excludes>
 					<rules>
 						<rule>
