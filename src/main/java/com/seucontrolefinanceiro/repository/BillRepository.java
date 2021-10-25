@@ -10,5 +10,5 @@ import java.util.Optional;
 @Repository
 public interface BillRepository extends MongoRepository<Bill, String> {
 
-    Optional<List<Bill>> findByUserId(String id);
+    List<Bill> findByUserId(String id);
 }

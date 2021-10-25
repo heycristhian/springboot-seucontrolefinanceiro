@@ -56,4 +56,21 @@ public class BillFactory {
 
         return List.of(bill1, bill2);
     }
+
+    public static Bill getBillWithId() {
+        return Bill.builder()
+                .id("123")
+                .billDescription("Mercado")
+                .amount(BigDecimal.valueOf(1000.90))
+                .everyMonth(true)
+                .payDAy(LocalDate.now())
+                .billType(BillType.PAYMENT)
+                .paymentCategory(PaymentCategoryFactory.getCategoryWithId())
+                .paid(false)
+                .parent("987")
+                .userId("432")
+                .portion(24)
+                .paidIn(LocalDate.now().plusDays(10))
+                .build();
+    }
 }

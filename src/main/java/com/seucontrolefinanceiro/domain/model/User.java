@@ -66,13 +66,11 @@ public class User implements UserDetails {
     }
 
     public void addToListBill(Bill bill) {
-        if (this.bills.size() > 0) {
-            this.bills.stream().filter(x -> x.getId().equals(bill.getId()))
-                    .findAny().ifPresent((value) -> {
-                    return;
-            });
+        boolean hasBill = bills.stream().anyMatch(b -> b.equals(bill));
+        this.bills = new ArrayList<>(List.copyOf(this.bills));
+        if (!hasBill) {
+            bills.add(bill);
         }
-        this.bills.add(bill);
     }
 
     @Override

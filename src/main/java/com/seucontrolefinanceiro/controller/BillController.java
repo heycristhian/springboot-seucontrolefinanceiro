@@ -61,7 +61,6 @@ public class BillController {
         Bill bill = form.converter();
         bill.setPaymentCategory(paymentCategoryService.findByDescriptionContainingIgnoreCase(bill.getPaymentCategory().getDescription()).get(0));
         service.update(bill);
-        URI uri = uriBuilder.path("scf-service/bills/{id}").buildAndExpand(bill.getId()).toUri();
         return ResponseEntity.noContent().build();
     }
 }

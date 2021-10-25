@@ -39,7 +39,7 @@ public class BillService {
 
     public Bill save(Bill bill) {
         User user = userService.findById(bill.getUserId());
-        List<Bill> allBillsByUserId = repository.findByUserId(bill.getUserId()).orElse(null);
+        List<Bill> allBillsByUserId = repository.findByUserId(bill.getUserId());
         user.setBills(allBillsByUserId);
         analyzeMonthlyBill(bill, user);
         String parentId = bill.getParent() == null ? bill.getId() : bill.getParent();
@@ -75,32 +75,8 @@ public class BillService {
         }
     }
 
-    public Bill updateData(Bill newObj, String id) {
-        return Bill.builder()
-                .id(id)
-                .billDescription(newObj.getBillDescription())
-                .amount(newObj.getAmount())
-                .everyMonth(newObj.isEveryMonth())
-                .payDAy(newObj.getPayDAy())
-                .billType(newObj.getBillType())
-                .paymentCategory(newObj.getPaymentCategory())
-                .paid(newObj.isPaid())
-                .parent(newObj.getParent())
-                .userId(newObj.getUserId())
-                .portion(newObj.getPortion())
-                .paidIn(newObj.getPaidIn())
-                .build();
-    }
 
-    public List<Bill> returnBillsChild(Bill bill) {
-        return repository.findAll().stream()
-                .filter(x -> x.getParent().equals(bill.getParent())
-                        && !x.getId().equals(bill.getId())
-                        && !x.isPaid())
-                .collect(Collectors.toList());
-    }
-
-    public Bill pay(Bill bill) {
+    private Bill pay(Bill bill) {
         bill.setPaid(true);
         repository.save(bill);
         return bill;
@@ -129,9 +105,9 @@ public class BillService {
     }
 
     private void createChildrenBill(Bill newBill) {
-        List<Bill> bills = new ArrayList<>();
+        List<Bill> bills;
         User user = userService.findById(newBill.getUserId());
-        user.setBills(repository.findByUserId(newBill.getUserId()).get());
+        user.setBills(repository.findByUserId(newBill.getUserId()));
 
         Integer index = newBill.getPortion() == null ? PORTION_DEFAULT : newBill.getPortion();
         bills = GenerateObject.generateBills(newBill, index);
@@ -147,7 +123,7 @@ public class BillService {
     private void removeChildrenBill(Bill newBill) {
         String parentId = newBill.getParent() == null ? newBill.getId() : newBill.getParent();
 
-        repository.findByUserId(newBill.getUserId()).get()
+        repository.findByUserId(newBill.getUserId())
                 .stream().filter(x ->
                 !x.isPaid()
                         && x.getParent().compareTo(parentId) == 0)
@@ -161,7 +137,7 @@ public class BillService {
         String parentId = newBill.getParent() == null ? newBill.getId() : newBill.getParent();
         try {
             bills = repository.findByUserId(newBill.getUserId())
-                    .get().stream()
+                    .stream()
                     .filter(x -> x.getParent().equals(parentId)
                             && !x.isPaid()
                             && !x.getId().equals(newBill.getId()))
@@ -171,7 +147,7 @@ public class BillService {
         }
 
         for (Bill b : bills) {
-            b = GenerateObject.cloneBill(b, newBill);
+            GenerateObject.cloneBill(b, newBill);
             repository.save(b);
         }
     }
