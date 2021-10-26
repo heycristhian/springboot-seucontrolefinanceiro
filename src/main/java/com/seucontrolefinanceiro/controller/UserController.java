@@ -9,7 +9,6 @@ import com.seucontrolefinanceiro.service.BillService;
 import com.seucontrolefinanceiro.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -41,8 +40,8 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<UserResponse> insert(@RequestBody @Validated UserRequest form, UriComponentsBuilder uriBuilder) {
-        User user = form.converter();
+    public ResponseEntity<UserResponse> insert(@RequestBody @Valid UserRequest request, UriComponentsBuilder uriBuilder) {
+        User user = request.converter();
         user = service.save(user);
         URI uri = uriBuilder.path("scf-service/users/{id}").buildAndExpand(user.getId()).toUri();
         return ResponseEntity.created(uri).body(new UserResponse(user));

@@ -1,20 +1,27 @@
 package com.seucontrolefinanceiro.domain.dto.request;
 
 import com.seucontrolefinanceiro.domain.model.User;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.validator.constraints.br.CPF;
+
+import javax.validation.constraints.NotNull;
 
 @RequiredArgsConstructor
 public class UserRequest {
-    @NonNull
+
     private final String id;
-    @NonNull
+
+    @NotNull
     private final String fullName;
-    @NonNull
+
+    @NotNull
     private final String email;
-    @NonNull
+
+    @NotNull
     private final String password;
-    @NonNull
+
+    @NotNull
+    @CPF
     private final String cpf;
 
     public User converter() {
