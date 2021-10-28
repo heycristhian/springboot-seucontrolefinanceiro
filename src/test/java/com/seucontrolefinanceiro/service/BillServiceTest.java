@@ -60,6 +60,15 @@ class BillServiceTest {
     }
 
     @Test
+    public void mustReturnBillIsNotEveryMonth_WhenCallSave() {
+        Bill bill = BillFactory.getBillIsNotEveryMonth();
+        User user = UserFactory.getUserWithId();
+        when(userService.findById(anyString())).thenReturn(user);
+        when(repository.findByUserId(anyString())).thenReturn(List.of(bill));
+        assertNotNull(service.save(bill));
+    }
+
+    @Test
     public void mustDeleteBill_WhenCallDelete() {
         Bill bill = BillFactory.getBillWithId();
         when(repository.findById(anyString())).thenReturn(Optional.of(bill));
@@ -72,10 +81,61 @@ class BillServiceTest {
         var expectedDescription = "Descricao nova";
         Bill newBill = BillFactory.getBillWithId();
         Bill oldBill = BillFactory.getBillWithId();
+        List<Bill> bills = BillFactory.getChildrenBills();
+        newBill.setParent(null);
         newBill.setBillDescription(expectedDescription);
         when(repository.findById(anyString())).thenReturn(Optional.of(oldBill));
+        when(repository.findByUserId(anyString())).thenReturn(bills);
         var resultDescription = service.update(newBill).getBillDescription();
         assertEquals(expectedDescription, resultDescription);
+    }
+
+    @Test
+    public void mustUpdateBillAndCreateChildren_WhenCallUpdate() {
+        var installments = 10;
+        Bill newBill = BillFactory.getBillIsEveryMonth();
+        Bill oldBill = BillFactory.getBillIsNotEveryMonth();
+        User user = UserFactory.getUserWithId();
+        newBill.setPortion(installments);
+
+        when(repository.findById(anyString())).thenReturn(Optional.of(oldBill));
+        when(repository.findByUserId(anyString())).thenReturn(List.of(newBill));
+        when(userService.findById(anyString())).thenReturn(user);
+        service.update(newBill);
+        verify(repository, times(installments - 1)).insert((Bill) any());
+        verify(userRepository, times(1)).save(any());
+    }
+
+    @Test
+    public void mustUpdateBillAndRemoveChildren_WhenCallUpdate() {
+        var installments = 2;
+        Bill newBill = BillFactory.getBillIsNotEveryMonth();
+        Bill oldBill = BillFactory.getBillIsEveryMonth();
+        List<Bill> bills = BillFactory.getChildrenBills();
+        newBill.setPortion(installments);
+        newBill.setParent(null);
+
+        when(repository.findById(anyString())).thenReturn(Optional.of(oldBill));
+        when(repository.findByUserId(anyString())).thenReturn(bills);
+        service.update(newBill);
+        verify(repository, times(installments)).delete(any());
+    }
+
+    @Test
+    public void mustPayBill_WhenCallUpdate() {
+        Bill bill = BillFactory.getBillWithId();
+        bill.setPaid(true);
+        service.update(bill);
+        verify(repository, times(1)).save(any());
+    }
+
+    @Test
+    public void mustThrowException_WhenCallUpdate() {
+        Bill bill = BillFactory.getBillWithId();
+
+        when(repository.findById(anyString())).thenReturn(Optional.of(bill));
+        when(repository.findByUserId(anyString())).thenThrow(RuntimeException.class);
+        assertThrows(RuntimeException.class, () -> service.update(bill));
     }
 
     @Test

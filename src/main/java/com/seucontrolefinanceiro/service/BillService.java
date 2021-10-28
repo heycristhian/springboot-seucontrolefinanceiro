@@ -77,7 +77,6 @@ public class BillService {
 
 
     private Bill pay(Bill bill) {
-        bill.setPaid(true);
         repository.save(bill);
         return bill;
     }
@@ -133,7 +132,7 @@ public class BillService {
     }
 
     private void onlyUpdateChildrenBill(Bill newBill) {
-        List<Bill> bills = new ArrayList<>();
+        List<Bill> bills;
         String parentId = newBill.getParent() == null ? newBill.getId() : newBill.getParent();
         try {
             bills = repository.findByUserId(newBill.getUserId())
@@ -143,7 +142,7 @@ public class BillService {
                             && !x.getId().equals(newBill.getId()))
                     .collect(Collectors.toList());
         } catch (RuntimeException e) {
-            e.printStackTrace();
+            throw e;
         }
 
         for (Bill b : bills) {

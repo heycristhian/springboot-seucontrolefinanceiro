@@ -3,6 +3,7 @@ package com.seucontrolefinanceiro.service;
 import com.seucontrolefinanceiro.domain.model.User;
 import com.seucontrolefinanceiro.exception.ObjectNotFoundException;
 import com.seucontrolefinanceiro.feature.UserFactory;
+import com.seucontrolefinanceiro.kafka.KafkaProducer;
 import com.seucontrolefinanceiro.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -27,6 +28,9 @@ class UserServiceTest {
 
     @Mock
     private UserRepository repository;
+
+    @Mock
+    private KafkaProducer kafkaProducer;
 
     @Test
     public void mustReturnAllUserus_WhenCallFindAll() {
@@ -60,6 +64,7 @@ class UserServiceTest {
         User user = UserFactory.getDefaultUser();
         when(repository.save(user)).thenReturn(user);
         assertNotNull(service.save(user));
+        verify(kafkaProducer, times(1)).send(anyString());
     }
 
     @Test
